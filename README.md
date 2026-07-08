@@ -147,14 +147,14 @@ doesn't try to resolve `geo-select` as a Vue component (see Vue's
 [`isCustomElement`](https://vuejs.org/guide/extras/web-components.html)
 compiler option).
 
-**Plain HTML** — see `demo/plain-script.html` in this repo.
+**Plain HTML** — see [`demo/plain-script.html`](https://github.com/gasperinn/geoselect/blob/main/demo/plain-script.html) in the repo.
 
-More usage examples live in `demo/`, each a standalone HTML file with no
-build step — open any of them directly, or serve the repo root and browse
-between them (they cross-link via a nav bar): custom dataset, hiding the
-built-in panels for your own results UI, posting the selection to an API,
-opening the picker inside a modal `<dialog>`, and multiple independent
-instances on one page.
+More usage examples live in [`demo/`](https://github.com/gasperinn/geoselect/tree/main/demo) on GitHub, each a standalone HTML file with no
+build step — clone the repo and open any of them directly, or serve the repo root and browse
+between them (they cross-link via a nav bar): [custom dataset](https://github.com/gasperinn/geoselect/blob/main/demo/custom-dataset.html), [hiding the
+built-in panels for your own results UI](https://github.com/gasperinn/geoselect/blob/main/demo/custom-ui.html), [posting the selection to an API](https://github.com/gasperinn/geoselect/blob/main/demo/api-integration.html),
+[opening the picker inside a modal `<dialog>`](https://github.com/gasperinn/geoselect/blob/main/demo/modal.html), and [multiple independent
+instances on one page](https://github.com/gasperinn/geoselect/blob/main/demo/multiple-instances.html).
 
 ## Project structure
 
@@ -168,7 +168,7 @@ src/
 scripts/
   generate-cities.mjs  regenerates default-cities.js from GeoNames data
 build.mjs              esbuild config — outputs dist/geoselect.{esm,global}.js
-demo/
+demo/                     (GitHub only — not published to npm, see below)
   index.html              ES module usage example
   plain-script.html       zero-build-step <script> tag usage example
   custom-dataset.html     overriding the bundled dataset via .cities
@@ -177,6 +177,10 @@ demo/
   modal.html              opening the picker inside a native <dialog>
   multiple-instances.html two independent <geo-select> elements on one page
 ```
+
+`demo/` lives in the [GitHub repo](https://github.com/gasperinn/geoselect/tree/main/demo)
+but is excluded from the published npm package (see `files` in `package.json`) —
+clone the repo to run the demos locally.
 
 ## Dataset size
 

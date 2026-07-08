@@ -17,6 +17,14 @@
     "src",
     "README.md"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gasperinn/geoselect.git"
+  },
+  "homepage": "https://github.com/gasperinn/geoselect#readme",
+  "bugs": {
+    "url": "https://github.com/gasperinn/geoselect/issues"
+  },
   "keywords": [
     "map",
     "leaflet",
