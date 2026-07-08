@@ -1,6 +1,6 @@
 {
   "name": "@gasperinn/geoselect",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A framework-agnostic map component for selecting cities by painting over a map with the mouse or touch, instead of typing/searching through a dropdown.",
   "type": "module",
   "main": "dist/geoselect.esm.js",
