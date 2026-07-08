@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoSelect demo — inside a modal dialog</title>
+<style>
+  body { font-family: -apple-system, sans-serif; margin: 0; padding: 24px; background: #f6f4ef; color: #1c1b19; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { color: #55534c; margin: 0 0 20px; font-size: 14px; max-width: 640px; }
+  code { background: white; padding: 1px 5px; border-radius: 4px; border: 1px solid #e2ded4; }
+  geo-select { border: 1px solid #e2ded4; border-radius: 10px; overflow: hidden; }
+  button { padding: 8px 16px; border: 1px solid #1d6e56; border-radius: 6px; background: #1d6e56; color: white; cursor: pointer; font-size: 14px; }
+  dialog {
+    border: none; border-radius: 12px; padding: 20px; width: min(720px, 90vw);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  }
+  dialog::backdrop { background: rgba(20, 18, 14, 0.45); }
+  .dialog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .dialog-header h2 { font-size: 16px; margin: 0; }
+  .dialog-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .count { font-size: 13px; color: #55534c; }
+  nav.demo-nav { margin-bottom: 18px; font-size: 13px; display: flex; gap: 4px 10px; flex-wrap: wrap; }
+  nav.demo-nav a { color: #1d6e56; text-decoration: none; }
+  nav.demo-nav a:hover { text-decoration: underline; }
+  nav.demo-nav span.active { font-weight: 600; color: #12110f; }
+</style>
+</head>
+<body>
+
+<nav class="demo-nav">
+  <a href="index.html">ES module</a> ·
+  <a href="plain-script.html">No-build script tag</a> ·
+  <a href="custom-dataset.html">Custom dataset</a> ·
+  <a href="custom-ui.html">Custom UI (hidden panels)</a> ·
+  <a href="api-integration.html">Post to API</a> ·
+  <span class="active">Inside a modal (this page)</span> ·
+  <a href="multiple-instances.html">Multiple instances</a>
+</nav>
+
+<h1>GeoSelect — opened inside a native <code>&lt;dialog&gt;</code></h1>
+<p class="sub">
+  <code>&lt;geo-select&gt;</code> stays mounted in the DOM the whole time — only
+  the <code>&lt;dialog&gt;</code> around it opens/closes via
+  <code>.showModal()</code> / <code>.close()</code>. Sizing works correctly
+  because the component watches its own container with a
+  <code>ResizeObserver</code> and calls Leaflet's <code>invalidateSize()</code>
+  whenever that container's box changes size — including the 0×0 → real-size
+  jump that happens the instant a closed <code>&lt;dialog&gt;</code> becomes
+  visible. Because the element is never removed from the DOM, the current
+  selection also survives closing and reopening the dialog.
+</p>
+
+<button id="open">Open city picker</button>
+<span class="count" id="outer-count"></span>
+
+<dialog id="dialog">
+  <div class="dialog-header">
+    <h2>Select cities</h2>
+    <span class="count" id="count">0 selected</span>
+  </div>
+
+  <geo-select id="picker" default-center-city="Rome" default-zoom="4" style="height: 440px; width: 100%;"></geo-select>
+
+  <div class="dialog-footer">
+    <button id="clear" style="background: white; color: #1d6e56;">Clear</button>
+    <button id="done">Done</button>
+  </div>
+</dialog>
+
+<script type="module">
+  import '../dist/geoselect.esm.js';
+
+  const dialog = document.getElementById('dialog');
+  const picker = document.getElementById('picker');
+  const countEl = document.getElementById('count');
+  const outerCountEl = document.getElementById('outer-count');
+
+  function updateCounts(count) {
+    countEl.textContent = `${count} selected`;
+    outerCountEl.textContent = count ? `(${count} selected so far)` : '';
+  }
+
+  picker.addEventListener('change', (e) => updateCounts(e.detail.count));
+
+  document.getElementById('open').addEventListener('click', () => dialog.showModal());
+  document.getElementById('done').addEventListener('click', () => dialog.close());
+  document.getElementById('clear').addEventListener('click', () => picker.clear());
+</script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoSelect demo — hiding the built-in panels for a custom UI</title>
+<style>
+  body { font-family: -apple-system, sans-serif; margin: 0; padding: 24px; background: #f6f4ef; color: #1c1b19; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { color: #55534c; margin: 0 0 20px; font-size: 14px; max-width: 640px; }
+  code { background: white; padding: 1px 5px; border-radius: 4px; border: 1px solid #e2ded4; }
+  .layout { display: flex; gap: 16px; align-items: flex-start; }
+  geo-select { border: 1px solid #e2ded4; border-radius: 10px; overflow: hidden; flex: 1; height: 520px; }
+  .my-sidebar {
+    width: 260px; background: white; border: 1px solid #e2ded4; border-radius: 8px;
+    padding: 14px; font-size: 13px;
+  }
+  .my-sidebar h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: #877f6c; margin: 0 0 10px; }
+  .my-sidebar ul { list-style: none; margin: 0; padding: 0; max-height: 380px; overflow-y: auto; }
+  .my-sidebar li { padding: 4px 0; border-bottom: 1px solid #f0ede4; }
+  .my-sidebar .count { font-weight: 600; margin-bottom: 8px; }
+  .my-sidebar button { width: 100%; margin-top: 10px; padding: 6px; border: 1px solid #e2ded4; border-radius: 6px; background: #f6f4ef; cursor: pointer; }
+  nav.demo-nav { margin-bottom: 18px; font-size: 13px; display: flex; gap: 4px 10px; flex-wrap: wrap; }
+  nav.demo-nav a { color: #1d6e56; text-decoration: none; }
+  nav.demo-nav a:hover { text-decoration: underline; }
+  nav.demo-nav span.active { font-weight: 600; color: #12110f; }
+</style>
+</head>
+<body>
+
+<nav class="demo-nav">
+  <a href="index.html">ES module</a> ·
+  <a href="plain-script.html">No-build script tag</a> ·
+  <a href="custom-dataset.html">Custom dataset</a> ·
+  <span class="active">Custom UI (hidden panels) (this page)</span> ·
+  <a href="api-integration.html">Post to API</a> ·
+  <a href="modal.html">Inside a modal</a> ·
+  <a href="multiple-instances.html">Multiple instances</a>
+</nav>
+
+<h1>GeoSelect — <code>show-results="false"</code> with a custom sidebar</h1>
+<p class="sub">
+  The built-in results list and the "set every stroke's radius to ___" panel
+  are both opt-out (<code>show-results</code> / <code>show-expand-radius</code>).
+  The <code>change</code> event still fires exactly the same either way, so
+  you can build your own results UI — as this page does — without losing any
+  functionality. <code>units="imperial"</code> is also set here, which only
+  affects the (now-hidden) built-in radius panel's unit label.
+</p>
+
+<div class="layout">
+  <geo-select
+    id="picker"
+    default-center-city="Chicago"
+    default-zoom="4"
+    units="imperial"
+    show-results="false"
+    show-expand-radius="false"
+  ></geo-select>
+
+  <div class="my-sidebar">
+    <h2>My own results panel</h2>
+    <div class="count" id="count">0 selected</div>
+    <ul id="list"></ul>
+    <button id="clear">Clear selection</button>
+  </div>
+</div>
+
+<script type="module">
+  import '../dist/geoselect.esm.js';
+
+  const picker = document.getElementById('picker');
+  const countEl = document.getElementById('count');
+  const listEl = document.getElementById('list');
+
+  picker.addEventListener('change', (e) => {
+    const { cities, count } = e.detail;
+    countEl.textContent = `${count} selected`;
+    listEl.innerHTML = cities
+      .slice(0, 50)
+      .map(c => `<li>${c.name}, ${c.country}</li>`)
+      .join('');
+  });
+
+  document.getElementById('clear').addEventListener('click', () => picker.clear());
+</script>
+
+</body>
+</html>

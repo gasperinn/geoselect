@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoSelect demo — posting the selection to an API</title>
+<style>
+  body { font-family: -apple-system, sans-serif; margin: 0; padding: 24px; background: #f6f4ef; color: #1c1b19; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { color: #55534c; margin: 0 0 20px; font-size: 14px; max-width: 640px; }
+  code { background: white; padding: 1px 5px; border-radius: 4px; border: 1px solid #e2ded4; }
+  geo-select { border: 1px solid #e2ded4; border-radius: 10px; overflow: hidden; }
+  .controls { margin: 14px 0; display: flex; align-items: center; gap: 10px; }
+  .controls button { padding: 7px 14px; border: 1px solid #1d6e56; border-radius: 6px; background: #1d6e56; color: white; cursor: pointer; font-size: 14px; }
+  .controls button:disabled { opacity: .5; cursor: default; }
+  .controls label { font-size: 13px; color: #55534c; display: flex; align-items: center; gap: 6px; }
+  .log {
+    margin-top: 8px; padding: 12px 16px; background: #12110f; color: #d7f5e9;
+    border-radius: 8px; font-family: monospace; font-size: 12px; white-space: pre-wrap;
+    max-height: 220px; overflow-y: auto;
+  }
+  .log .req { color: #7fd6ff; }
+  .log .res { color: #9dff9d; }
+  nav.demo-nav { margin-bottom: 18px; font-size: 13px; display: flex; gap: 4px 10px; flex-wrap: wrap; }
+  nav.demo-nav a { color: #1d6e56; text-decoration: none; }
+  nav.demo-nav a:hover { text-decoration: underline; }
+  nav.demo-nav span.active { font-weight: 600; color: #12110f; }
+</style>
+</head>
+<body>
+
+<nav class="demo-nav">
+  <a href="index.html">ES module</a> ·
+  <a href="plain-script.html">No-build script tag</a> ·
+  <a href="custom-dataset.html">Custom dataset</a> ·
+  <a href="custom-ui.html">Custom UI (hidden panels)</a> ·
+  <span class="active">Post to API (this page)</span> ·
+  <a href="modal.html">Inside a modal</a> ·
+  <a href="multiple-instances.html">Multiple instances</a>
+</nav>
+
+<h1>GeoSelect — sending <code>selectedCities</code> to an API</h1>
+<p class="sub">
+  This page has no real backend, so <code>postSelection()</code> below calls a
+  local <code>mockApi()</code> stand-in instead of a live <code>fetch()</code> —
+  but the shape (JSON body, headers, response handling) is exactly what you'd
+  write against a real endpoint. Swap <code>mockApi</code> for
+  <code>fetch('/api/cities', ...)</code> and it works unchanged.
+</p>
+
+<geo-select id="picker" default-center-city="Madrid" default-zoom="4" style="height: 460px; width: 100%;"></geo-select>
+
+<div class="controls">
+  <button id="submit">Submit selection to API</button>
+  <label><input type="checkbox" id="auto"> auto-submit on every change (debounced 600ms)</label>
+</div>
+
+<div class="log" id="log">Requests/responses will be logged here.</div>
+
+<script type="module">
+  import '../dist/geoselect.esm.js';
+
+  const picker = document.getElementById('picker');
+  const logEl = document.getElementById('log');
+  const submitBtn = document.getElementById('submit');
+  const autoCheckbox = document.getElementById('auto');
+
+  function log(cls, text) {
+    const line = document.createElement('div');
+    line.className = cls;
+    line.textContent = text;
+    logEl.appendChild(line);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  // Stand-in for a real backend. Replace with:
+  //   const res = await fetch('/api/cities', {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({ cities }),
+  //   });
+  //   if (!res.ok) throw new Error(`API error: ${res.status}`);
+  //   return res.json();
+  async function mockApi(cities) {
+    await new Promise(r => setTimeout(r, 300)); // simulate network latency
+    return { ok: true, received: cities.length };
+  }
+
+  async function postSelection() {
+    const cities = picker.selectedCities;
+    submitBtn.disabled = true;
+    log('req', `POST /api/cities  body: { cities: [${cities.length} items] }`);
+    try {
+      const result = await mockApi(cities);
+      log('res', `200 OK  ${JSON.stringify(result)}`);
+    } catch (err) {
+      log('res', `Error: ${err.message}`);
+    } finally {
+      submitBtn.disabled = false;
+    }
+  }
+
+  submitBtn.addEventListener('click', postSelection);
+
+  // Debounced auto-submit: the "change" event fires on every completed brush
+  // stroke, undo, and clear — debounce so a long drag doesn't fire a request
+  // per stroke.
+  let debounceTimer = null;
+  picker.addEventListener('change', () => {
+    if (!autoCheckbox.checked) return;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(postSelection, 600);
+  });
+</script>
+
+</body>
+</html>

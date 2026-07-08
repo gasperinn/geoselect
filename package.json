@@ -1,0 +1,43 @@
+{
+  "name": "@gasperinn/geoselect",
+  "version": "0.1.0",
+  "description": "A framework-agnostic map component for selecting cities by painting over a map with the mouse or touch, instead of typing/searching through a dropdown.",
+  "type": "module",
+  "main": "dist/geoselect.esm.js",
+  "module": "dist/geoselect.esm.js",
+  "unpkg": "dist/geoselect.global.js",
+  "exports": {
+    ".": {
+      "import": "./dist/geoselect.esm.js",
+      "default": "./dist/geoselect.esm.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "map",
+    "leaflet",
+    "city-picker",
+    "geo",
+    "web-component",
+    "custom-element",
+    "select"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "generate:cities": "node scripts/generate-cities.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "all-the-cities": "^3.1.0",
+    "esbuild": "^0.28.1"
+  }
+}

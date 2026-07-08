@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoSelect demo — custom dataset</title>
+<style>
+  body { font-family: -apple-system, sans-serif; margin: 0; padding: 24px; background: #f6f4ef; color: #1c1b19; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { color: #55534c; margin: 0 0 20px; font-size: 14px; }
+  geo-select { border: 1px solid #e2ded4; border-radius: 10px; overflow: hidden; }
+  code { background: white; padding: 1px 5px; border-radius: 4px; border: 1px solid #e2ded4; }
+  nav.demo-nav { margin-bottom: 18px; font-size: 13px; display: flex; gap: 4px 10px; flex-wrap: wrap; }
+  nav.demo-nav a { color: #1d6e56; text-decoration: none; }
+  nav.demo-nav a:hover { text-decoration: underline; }
+  nav.demo-nav span.active { font-weight: 600; color: #12110f; }
+</style>
+</head>
+<body>
+
+<nav class="demo-nav">
+  <a href="index.html">ES module</a> ·
+  <a href="plain-script.html">No-build script tag</a> ·
+  <span class="active">Custom dataset (this page)</span> ·
+  <a href="custom-ui.html">Custom UI (hidden panels)</a> ·
+  <a href="api-integration.html">Post to API</a> ·
+  <a href="modal.html">Inside a modal</a> ·
+  <a href="multiple-instances.html">Multiple instances</a>
+</nav>
+
+<h1>GeoSelect — overriding the dataset via <code>.cities</code></h1>
+<p class="sub">
+  Instead of the bundled ~130k-city dataset, this page hands the component a
+  small, hand-picked list of ten cities via the <code>.cities</code> property.
+  Only those ten can ever be selected — useful if your app only cares about a
+  fixed set of locations (e.g. warehouses, store fronts, regional offices)
+  and shipping the full dataset would be wasted bandwidth.
+</p>
+
+<geo-select id="picker" default-zoom="2" style="height: 520px; width: 100%;"></geo-select>
+
+<script type="module">
+  import '../dist/geoselect.esm.js';
+
+  const picker = document.getElementById('picker');
+
+  // Same shape as the built-in dataset: { name, country, lat, lng, population }.
+  // population only affects the sidebar's default sort order (largest first).
+  picker.cities = [
+    { name: 'San Francisco', country: 'US', lat: 37.7749, lng: -122.4194, population: 873965 },
+    { name: 'Austin', country: 'US', lat: 30.2672, lng: -97.7431, population: 961855 },
+    { name: 'Toronto', country: 'CA', lat: 43.6532, lng: -79.3832, population: 2731571 },
+    { name: 'London', country: 'GB', lat: 51.5072, lng: -0.1276, population: 8982000 },
+    { name: 'Berlin', country: 'DE', lat: 52.52, lng: 13.405, population: 3645000 },
+    { name: 'Lisbon', country: 'PT', lat: 38.7223, lng: -9.1393, population: 545923 },
+    { name: 'Nairobi', country: 'KE', lat: -1.2921, lng: 36.8219, population: 4397073 },
+    { name: 'Singapore', country: 'SG', lat: 1.3521, lng: 103.8198, population: 5686000 },
+    { name: 'Sydney', country: 'AU', lat: -33.8688, lng: 151.2093, population: 5312163 },
+    { name: 'São Paulo', country: 'BR', lat: -23.5505, lng: -46.6333, population: 12325232 },
+  ];
+
+  picker.addEventListener('change', (e) => {
+    console.log('Selected from the custom list:', e.detail.cities);
+  });
+</script>
+
+</body>
+</html>

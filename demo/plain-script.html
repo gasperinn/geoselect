@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GeoSelect demo — plain script tag, no modules</title>
+<style>
+  body { font-family: -apple-system, sans-serif; margin: 0; padding: 24px; background: #f6f4ef; }
+  geo-select { border: 1px solid #e2ded4; border-radius: 10px; overflow: hidden; }
+  nav.demo-nav { margin-bottom: 18px; font-size: 13px; display: flex; gap: 4px 10px; flex-wrap: wrap; }
+  nav.demo-nav a { color: #1d6e56; text-decoration: none; }
+  nav.demo-nav a:hover { text-decoration: underline; }
+  nav.demo-nav span.active { font-weight: 600; color: #12110f; }
+</style>
+</head>
+<body>
+
+<nav class="demo-nav">
+  <a href="index.html">ES module</a> ·
+  <span class="active">No-build script tag (this page)</span> ·
+  <a href="custom-dataset.html">Custom dataset</a> ·
+  <a href="custom-ui.html">Custom UI (hidden panels)</a> ·
+  <a href="api-integration.html">Post to API</a> ·
+  <a href="modal.html">Inside a modal</a> ·
+  <a href="multiple-instances.html">Multiple instances</a>
+</nav>
+
+<h1>GeoSelect — zero-build-step usage</h1>
+<p>No bundler, no <code>type="module"</code> — just a script tag, like jQuery-era HTML.</p>
+
+<geo-select
+  default-center-city="Tokyo"
+  default-zoom="4"
+  allowed-countries="JP,KR,CN"
+  language="en"
+  style="height: 500px; width: 100%;"
+
+></geo-select>
+
+<!-- Local usage (this repo): -->
+<script src="../dist/geoselect.global.js"></script>
+<!-- Once published: <script src="https://cdn.jsdelivr.net/npm/geoselect/dist/geoselect.global.js"></script> -->
+
+<script>
+  document.querySelector('geo-select').addEventListener('change', (e) => {
+    console.log('Selected:', e.detail.count, 'cities');
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoSelect demo</title>
+<style>
+  body { font-family: -apple-system, sans-serif; margin: 0; padding: 24px; background: #f6f4ef; color: #1c1b19; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { color: #55534c; margin: 0 0 20px; font-size: 14px; }
+  geo-select { border: 1px solid #e2ded4; border-radius: 10px; overflow: hidden; }
+  .output {
+    margin-top: 16px; padding: 12px 16px; background: white; border: 1px solid #e2ded4;
+    border-radius: 8px; font-family: monospace; font-size: 13px; white-space: pre-wrap;
+    max-height: 160px; overflow-y: auto;
+  }
+  .controls { margin: 16px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+  .controls button, .controls select {
+    padding: 6px 12px; border: 1px solid #e2ded4; border-radius: 6px; background: white; cursor: pointer;
+  }
+  nav.demo-nav { margin-bottom: 18px; font-size: 13px; display: flex; gap: 4px 10px; flex-wrap: wrap; }
+  nav.demo-nav a { color: #1d6e56; text-decoration: none; }
+  nav.demo-nav a:hover { text-decoration: underline; }
+  nav.demo-nav span.active { font-weight: 600; color: #12110f; }
+</style>
+</head>
+<body>
+
+<nav class="demo-nav">
+  <span class="active">ES module (this page)</span> ·
+  <a href="plain-script.html">No-build script tag</a> ·
+  <a href="custom-dataset.html">Custom dataset</a> ·
+  <a href="custom-ui.html">Custom UI (hidden panels)</a> ·
+  <a href="api-integration.html">Post to API</a> ·
+  <a href="modal.html">Inside a modal</a> ·
+  <a href="multiple-instances.html">Multiple instances</a>
+</nav>
+
+<h1>GeoSelect — plain HTML usage example</h1>
+<p class="sub">No framework, no build step — just the custom element and a &lt;script type="module"&gt; import.</p>
+
+<div class="controls">
+  <button id="btn-clear">Clear (calls .clear())</button>
+  <button id="btn-undo">Undo (calls .undo())</button>
+  <select id="lang-picker">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+    <option value="it">Italiano</option>
+    <option value="zh">中文</option>
+    <option value="ar">العربية</option>
+  </select>
+</div>
+
+<geo-select
+  id="picker"
+  default-center-city="Paris"
+  default-zoom="5"
+  units="metric"
+  language="en"
+  style="height: 520px; width: 100%;"
+></geo-select>
+
+<div class="output" id="output">Selected cities will appear here as JSON — this is listening to the "change" event, not reading the component's internals directly.</div>
+
+<script type="module">
+  // Local usage (this repo, before publishing to npm):
+  import '../dist/geoselect.esm.js';
+
+  // Once published, a consumer would instead do either:
+  //   import 'geoselect';                                    (with a bundler)
+  //   import 'https://cdn.jsdelivr.net/npm/geoselect/dist/geoselect.esm.js';  (no bundler)
+  // or for a plain <script> tag with no module system at all — see demo/plain-script.html
+
+  const picker = document.getElementById('picker');
+  const output = document.getElementById('output');
+
+  picker.addEventListener('change', (e) => {
+    const { cities, count } = e.detail;
+    output.textContent = `${count} selected:\n` + cities.slice(0, 15).map(c => `${c.name}, ${c.country}`).join('\n')
+      + (count > 15 ? `\n...and ${count - 15} more` : '');
+  });
+
+  document.getElementById('btn-clear').addEventListener('click', () => picker.clear());
+  document.getElementById('btn-undo').addEventListener('click', () => picker.undo());
+  document.getElementById('lang-picker').addEventListener('change', (e) => {
+    picker.setAttribute('language', e.target.value);
+  });
+</script>
+
+</body>
+</html>
