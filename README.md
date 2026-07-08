@@ -10,6 +10,8 @@ way in React, Vue, Angular, Svelte, or a plain HTML page with no framework
 at all. There is exactly one implementation; every framework just renders
 the same custom element.
 
+![GeoSelect in action](demo/index.png)
+
 ## Install
 
 ```bash
@@ -149,12 +151,34 @@ compiler option).
 
 **Plain HTML** — see [`demo/plain-script.html`](https://github.com/gasperinn/geoselect/blob/main/demo/plain-script.html) in the repo.
 
+![Plain script demo](demo/plain-script.png)
+
 More usage examples live in [`demo/`](https://github.com/gasperinn/geoselect/tree/main/demo) on GitHub, each a standalone HTML file with no
 build step — clone the repo and open any of them directly, or serve the repo root and browse
-between them (they cross-link via a nav bar): [custom dataset](https://github.com/gasperinn/geoselect/blob/main/demo/custom-dataset.html), [hiding the
-built-in panels for your own results UI](https://github.com/gasperinn/geoselect/blob/main/demo/custom-ui.html), [posting the selection to an API](https://github.com/gasperinn/geoselect/blob/main/demo/api-integration.html),
-[opening the picker inside a modal `<dialog>`](https://github.com/gasperinn/geoselect/blob/main/demo/modal.html), and [multiple independent
-instances on one page](https://github.com/gasperinn/geoselect/blob/main/demo/multiple-instances.html).
+between them (they cross-link via a nav bar):
+
+| Demo | Description |
+|---|---|
+| [`custom-dataset.html`](https://github.com/gasperinn/geoselect/blob/main/demo/custom-dataset.html) | Overriding the bundled dataset via `.cities` |
+| [`custom-ui.html`](https://github.com/gasperinn/geoselect/blob/main/demo/custom-ui.html) | Hiding the built-in panels for your own results UI |
+| [`api-integration.html`](https://github.com/gasperinn/geoselect/blob/main/demo/api-integration.html) | Posting the selection to an API |
+| [`modal.html`](https://github.com/gasperinn/geoselect/blob/main/demo/modal.html) | Opening the picker inside a modal `<dialog>` |
+| [`multiple-instances.html`](https://github.com/gasperinn/geoselect/blob/main/demo/multiple-instances.html) | Multiple independent instances on one page |
+
+<table>
+<tr>
+<td><img src="demo/custom-dataset.png" alt="Custom dataset demo" width="380"></td>
+<td><img src="demo/custom-ui.png" alt="Custom UI demo" width="380"></td>
+</tr>
+<tr>
+<td><img src="demo/api-integration.png" alt="API integration demo" width="380"></td>
+<td><img src="demo/modal.png" alt="Modal demo" width="380"></td>
+</tr>
+<tr>
+<td><img src="demo/multiple-instances.png" alt="Multiple instances demo" width="380"></td>
+<td></td>
+</tr>
+</table>
 
 ## Project structure
 
